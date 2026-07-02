@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MEDI CONNECT — Future of Healthcare</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#2366A4;
+    --teal:#2CB9B6;
+    --aqua:#6EC0CD;
+    --cyan:#B4DAE0;
+    --frost:#E2E9EE;
+    --white:#FFFFFF;
+    --ink:#0b2540;
+    --muted:#587089;
+    --glow: 0 0 40px rgba(44,185,182,.35), 0 0 80px rgba(35,102,164,.18);
+    --glass-bg: rgba(255,255,255,.55);
+    --glass-brd: rgba(110,192,205,.45);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{overflow-x:hidden; scroll-behavior: smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(110,192,205,.45), transparent 60%),
+      radial-gradient(900px 700px at -10% 30%, rgba(44,185,182,.28), transparent 60%),
+      radial-gradient(900px 600px at 50% 110%, rgba(35,102,164,.20), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #f3fafc 40%, #e2e9ee 100%);
+    min-height:100vh;
+  }
+  h1,h2,h3,.brand{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em}
+  a{color:inherit;text-decoration:none}
+
+  /* ===== Loader ===== */
+  #loader{
+    position:fixed;inset:0;z-index:9999;
+    background:radial-gradient(circle at center,#ffffff 0%, #e2e9ee 100%);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .8s ease, visibility .8s ease;
+  }
+  #loader.hide{opacity:0;visibility:hidden}
+  .loader-logo{
+    width:88px;height:88px;border-radius:24px;
+    background:linear-gradient(135deg,var(--blue),var(--teal));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:36px;
+    box-shadow:var(--glow);
+    animation:beat 1.2s ease-in-out infinite;
+  }
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+  /* ===== Background Particles ===== */
+  .bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .float-ic{
+    position:absolute;font-size:24px;
+    color:var(--teal);opacity:.12;
+    animation:floatY 10s ease-in-out infinite;
+  }
+  @keyframes floatY{
+    0%,100%{transform:translateY(0) rotate(0)}
+    50%{transform:translateY(-60px) rotate(20deg)}
+  }
+  .molecule{
+    position:absolute;width:4px;height:4px;border-radius:50%;
+    background:var(--teal);box-shadow:0 0 10px var(--teal);opacity:.4;
+    animation:floatY 12s ease-in-out infinite;
+  }
+
+  /* ===== Navigation ===== */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:saturate(180%) blur(18px);
+    background:rgba(255,255,255,.55);
+    border-bottom:1px solid rgba(110,192,205,.35);
+  }
+  .nav-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 40px;
+}
+
+
+
+.brand-name{
+    font-size: 28px;
+    font-weight: 800;
+    color: #173f73;
+    line-height: 1;
+}
+
+.nav-links{
+    display: flex;
+    gap: 35px;
+    margin-left: 60px;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-links a{
+    text-decoration: none;
+    color: #5d7088;
+    font-weight: 600;
+}
+
+.nav-cta{
+    flex-shrink: 0;
+}
+  .btn{
+    padding:11px 22px;border-radius:999px;border:none;cursor:pointer;
+    font-weight:600;font-size:14px;transition:.35s ease;
+    font-family:inherit;
+  }
+
+
+  .btn-primary{
+    background:linear-gradient(135deg,var(--blue),var(--teal));
+    color:#fff;box-shadow:0 10px 28px rgba(35,102,164,.35);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 15px 35px rgba(35,102,164,.45);}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;z-index:2;
+    max-width:1280px;margin:auto;padding:100px 28px;
+    display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;
+  }
+  @media(max-width:980px){.hero{grid-template-columns:1fr;padding-top:60px}}
+  .pill{
+    display:inline-flex;gap:8px;align-items:center;
+    padding:7px 14px;border-radius:999px;
+    background:rgba(255,255,255,.7);backdrop-filter:blur(10px);
+    border:1px solid var(--glass-brd);
+    color:var(--blue);font-weight:600;font-size:13px;
+  }
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal);animation:beat 1.4s infinite}
+  .hero h1{
+    font-size:clamp(40px,5.6vw,72px);font-weight:700;line-height:1.05;margin:18px 0 20px;
+    background:linear-gradient(135deg,#0b2540 0%, #2366A4 50%, #2CB9B6 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{font-size:18px;line-height:1.6;color:var(--muted);max-width:560px;margin-bottom:32px}
+
+  .hero-visual{position:relative;height:500px;display:flex;align-items:center;justify-content:center}
+  .orbit{
+    position:absolute;border:1px dashed rgba(35,102,164,.2);border-radius:50%;
+    animation:spin 30s linear infinite;
+  }
+  .orbit.o1{width:500px;height:500px}
+  .orbit.o2{width:380px;height:380px;animation-duration:22s;animation-direction:reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ai-orb{
+    position:relative;width:180px;height:180px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #ffffff, var(--cyan) 35%, var(--teal) 70%, var(--blue) 100%);
+    box-shadow:0 20px 60px rgba(35,102,164,0.3);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:54px;
+    animation:beat 2.4s ease-in-out infinite;
+  }
+
+  /* ===== Section Commons ===== */
+  section.block{position:relative;z-index:2;max-width:1280px;margin:auto;padding:80px 28px}
+  .sec-head{text-align:center;max-width:800px;margin:0 auto 50px}
+  .section-title{font-size:clamp(30px,3.6vw,46px);font-weight:700;margin-bottom:10px; color: var(--ink)}
+  .section-sub{color:var(--muted);font-size:18px;line-height:1.6}
+
+  .glass{
+    background:var(--glass-bg);backdrop-filter:blur(18px);
+    border:1px solid var(--glass-brd);
+    border-radius:22px;padding:30px;
+    box-shadow:0 14px 40px rgba(35,102,164,.08);
+    transition:.4s ease;
+    text-align: center;
+  }
+  .glass:hover{transform:translateY(-8px); border-color:var(--teal); box-shadow: 0 20px 50px rgba(44,185,182,0.15);}
+
+  /* ===== Departments Grid ===== */
+  .department-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  .department-card i{
+    font-size: 32px;
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .department-card h3{ font-size: 18px; color: var(--ink); }
+
+  /* ===== Specialist Grid ===== */
+  .specialist-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+  }
+  .specialist-card i{
+    font-size: 40px;
+    color: var(--teal);
+    margin-bottom: 15px;
+    display: block;
+  }
+  .specialist-card h3{ font-size: 20px; margin-bottom: 8px; }
+  .specialist-card p{ font-size: 14px; color: var(--muted); margin: 4px 0; }
+  .specialist-card p:last-child{ font-weight: 600; color: var(--blue); margin-top: 10px; }
+
+  /* ===== How It Works Grid ===== */
+  .how-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+  .how-card i{
+    font-size: 36px;
+    color: var(--blue);
+    margin-bottom: 20px;
+    display: block;
+  }
+  .how-card h3{ margin-bottom: 12px; color: var(--ink); }
+  .how-card p{ color: var(--muted); font-size: 15px; line-height: 1.5; }
+
+  /* ===== Contact Grid ===== */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+  }
+  .contact-card i {
+    font-size: 28px;
+    color: var(--blue);
+    margin-bottom: 15px;
+  }
+  .contact-card h3 { margin-bottom: 10px; font-size: 20px; }
+  .contact-card p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+  /* ===== Stats ===== */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  @media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat .num{
+    font-family:'Space Grotesk';font-size:40px;font-weight:700;
+    background:linear-gradient(135deg,var(--blue),var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  /* Footer */
+  footer{padding:60px 28px 30px;color:var(--muted);text-align:center;font-size:14px}
+  .foot-links{display:flex;gap:24px;justify-content:center;margin:15px 0}
+
+  .reveal{opacity:0;transform:translateY(30px);transition:0.8s ease-out}
+  .reveal.in{opacity:1;transform:none}
+  .brand{
+    display: flex;
+    align-items: center;
+}
+
+.logo{
+    width: 150px;
+    height: 75px;
+    object-fit: contain;
+}
+
+.nav-wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 40px;
+}
+
+.nav-links{
+    display:flex;
+    gap:35px;
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-logo"><i class="fas fa-heart-pulse"></i></div>
+</div>
+
+<div class="bg-fx" id="bgfx"></div>
+
+  <nav>
+    <div class="nav-wrap">
+
+        <div class="brand">
+          <img src="logo.jpeg" class="logo" alt="Logo">
+            <span class="brand-name">MEDI CONNECT</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#departments">Department</a>
+            <a href="#doctors">Specialists</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+
+        <div class="nav-cta">
+            <button class="btn btn-primary" onclick="goToLogin()">
+                Sign in
+            </button>
+        </div>
+
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <span class="pill"><span class="dot"></span> MEDI-CONNECT</span>
+    <h1>Book, Track, and Manage Your Healthcare Journey in One Place</h1>
+    <p class="lead">Unifying providers and patients on a secure, . Experience healthcare as it should be: seamless, fast, and human-centric.</p>
+    <button class="btn btn-primary" onclick="openPatientPortal()">
+      Book Appointment
+  </button>
+  </div>
+  <div class="hero-visual" id="heroVisual">
+    <div class="orbit o1"></div>
+    <div class="orbit o2"></div>
+    <div class="ai-orb"><i class="fas fa-heart-pulse"></i></div>
+  </div>
+</section>
+
+<!-- DEPARTMENTS -->
+<section class="block reveal" id="departments">
+  <div class="sec-head">
+    <h2 class="section-title">Medical Departments</h2>
+    <p class="section-sub">Specialized medical care across 6 departments</p>
+  </div>
+  <div class="department-grid">
+    <div class="glass department-card"><i class="fas fa-heartbeat"></i><h3>Cardiology</h3></div>
+    <div class="glass department-card"><i class="fas fa-brain"></i><h3>Neurology</h3></div>
+    <div class="glass department-card"><i class="fas fa-bone"></i><h3>Orthopedics</h3></div>
+    <div class="glass department-card"><i class="fas fa-eye"></i><h3>Ophthalmology</h3></div>
+    <div class="glass department-card"><i class="fas fa-child"></i><h3>Pediatrics</h3></div>
+    <div class="glass department-card"><i class="fas fa-tooth"></i><h3>Dentistry</h3></div>
+  </div>
+</section>
+
+<!-- SPECIALISTS -->
+<section class="block reveal" id="doctors">
+  <div class="sec-head">
+    <h2 class="section-title">Meet Our Specialists</h2>
+    <p class="section-sub">Board-certified doctors ready to care for you</p>
+  </div>
+  <div class="specialist-grid">
+    <div class="glass specialist-card">
+        <i class="fas fa-user-doctor"></i>
+        <h3>Dr. Sarah Mitchell</h3>
+        <p>Cardiologist</p>
+        <p>⭐ 4.9 | 15 Years Experience</p>
+    </div>
+    <div class="glass specialist-card">
+        <i class="fas fa-user-doctor"></i>
+        <h3>Dr. James Cooper</h3>
+        <p>Neurologist</p>
+        <p>⭐ 4.8 | 12 Years Experience</p>
+    </div>
+    <div class="glass specialist-card">
+        <i class="fas fa-user-doctor"></i>
+        <h3>Dr. Robert Chen</h3>
+        <p>Orthopedic Surgeon</p>
+        <p>⭐ 4.9 | 18 Years Experience</p>
+    </div>
+    <div class="glass specialist-card">
+        <i class="fas fa-user-doctor"></i>
+        <h3>Dr. Emily Watson</h3>
+        <p>Ophthalmologist</p>
+        <p>⭐ 4.7 | 10 Years Experience</p>
+    </div>
+    <div class="glass specialist-card">
+        <i class="fas fa-user-doctor"></i>
+        <h3>Dr. Michael Brown</h3>
+        <p>Pediatrician</p>
+        <p>⭐ 4.8 | 14 Years Experience</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="block reveal" id="how-it-works">
+  <div class="sec-head">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-sub">3 simple steps to book your appointment</p>
+  </div>
+  <div class="how-grid">
+    <div class="glass how-card">
+        <i class="fas fa-user-plus"></i>
+        <h3>Create Account</h3>
+        <p>Register as a patient in under 2 minutes.</p>
+    </div>
+    <div class="glass how-card">
+        <i class="fas fa-search"></i>
+        <h3>Find a Doctor</h3>
+        <p>Browse specialists by department.</p>
+    </div>
+    <div class="glass how-card">
+        <i class="fas fa-calendar-check"></i>
+        <h3>Book & Confirm</h3>
+        <p>Select a time slot and confirm instantly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT US SECTION -->
+<section class="block reveal" id="contact">
+  <div class="sec-head">
+    <h2 class="section-title">Contact Us</h2>
+    <p class="section-sub">Have questions? We're here to help you 24/7.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="glass contact-card">
+        <i class="fas fa-location-dot"></i>
+        <h3>Our Address</h3>
+        <p>123 Healthcare Plaza, Medical District<br>New York, NY 10001, USA</p>
+    </div>
+    <div class="glass contact-card">
+        <i class="fas fa-phone"></i>
+        <h3>Call Us</h3>
+        <p>Toll Free: +1 (800) 555-MEDI<br>Office: +1 (212) 555-0198</p>
+    </div>
+    <div class="glass contact-card">
+        <i class="fas fa-envelope"></i>
+        <h3>Email Support</h3>
+        <p>support@mediconnect.com<br>info@mediconnect.org</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="block reveal">
+  <div class="stats">
+    <div class="glass stat"><div class="num" data-target="500">0</div><div class="lbl">Hospitals</div></div>
+    <div class="glass stat"><div class="num" data-target="12000">0</div><div class="lbl">Doctors</div></div>
+    <div class="glass stat"><div class="num" data-target="2">0</div><div class="lbl">Million Patients</div></div>
+    <div class="glass stat"><div class="num" data-target="99">0</div><div class="lbl">% Precision</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand" style="justify-content:center;">
+    <img src="logo.jpeg" class="logo" alt="Logo">
+    <span class="brand-name">MEDI CONNECT</span>
+</div>
+  <div>© 2026 Medi Connect. Redefining modern medicine with AI-driven care.</div>
+</footer>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(()=>document.getElementById('loader').classList.add('hide'), 800);
+  });
+
+  const bgfx = document.getElementById('bgfx');
+  const iconList = ['fa-dna', 'fa-brain', 'fa-heart-pulse', 'fa-stethoscope', 'fa-plus', 'fa-hospital', 'fa-pills', 'fa-microscope', 'fa-syringe', 'fa-user-nurse', 'fa-file-medical', 'fa-capsules'];
+
+  for(let i=0; i<40; i++) {
+    const icon = document.createElement('i');
+    const randomIcon = iconList[Math.floor(Math.random() * iconList.length)];
+    icon.className = `float-ic fas ${randomIcon}`;
+    icon.style.left = Math.random() * 100 + '%';
+    icon.style.top = Math.random() * 100 + '%';
+    icon.style.animationDelay = (Math.random() * 8) + 's';
+    icon.style.animationDuration = (8 + Math.random() * 10) + 's';
+    icon.style.fontSize = (14 + Math.random() * 20) + 'px';
+    bgfx.appendChild(icon);
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }});
+  }, {threshold: 0.1});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const animateNum = (el) => {
+    const target = +el.dataset.target;
+    const dur = 2000;
+    const start = performance.now();
+    const step = t => {
+      const p = Math.min((t - start) / dur, 1);
+      const v = Math.floor(target * p);
+      el.textContent = v + (target === 99 ? '%' : target === 2 ? 'M' : '+');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  const sIo = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { animateNum(e.target); sIo.unobserve(e.target); }});
+  }, {threshold: 0.5});
+  document.querySelectorAll('.num').forEach(el => sIo.observe(el));
+
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    const hv = document.getElementById('heroVisual');
+    if(hv) hv.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  function goToLogin() {
+    window.location.href = "login.html";
+}
+</script>
+<script>
+  function openPatientPortal() {
+      window.location.href = "patient.html";
+  }
+  </script>
+  <script>
+    function goToLogin() {
+        window.location.href = "index.html";
+    }
+    
+    </script>
+</body>
+</html>

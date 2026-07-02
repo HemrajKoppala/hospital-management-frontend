@@ -1,0 +1,488 @@
+/* ==========================================================================
+   GLOBAL STYLE VARS & RESET CORE
+   ========================================================================== */
+:root {
+    --blue: #2366A4;
+    --teal: #2CB9B6;
+    --aqua: #6EC0CD;
+    --cyan: #B4DAE0;
+    --frost: #E2E9EE;
+    --white: #FFFFFF;
+    --ink: #0b2540;
+    --muted: #587089;
+    --glow: 0 0 40px rgba(44,185,182,.35), 0 0 80px rgba(35,102,164,.18);
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-brd: rgba(110, 192, 205, 0.4);
+    
+    /* Compatibility variables */
+    --primary-sky-blue: var(--teal);
+    --app-white: #FFFFFF;
+    --card-light-blue: rgba(44, 185, 182, 0.08);
+    --text-dark-gray: var(--ink);
+    --sidebar-width: 260px;
+    --transition-speed: 0.25s;
+}
+
+body {
+    color: var(--ink);
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(110,192,205,.35), transparent 60%),
+      radial-gradient(900px 700px at -10% 30%, rgba(44,185,182,.2), transparent 60%),
+      radial-gradient(900px 600px at 50% 110%, rgba(35,102,164,.15), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #f3fafc 40%, #e2e9ee 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Custom Space Helper utilities */
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-3 > * + * { margin-top: 0.75rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.text-xs { font-size: 0.75rem; }
+.tracking-wider { letter-spacing: 0.05em; }
+
+/* Enhanced Border Radius for Modern Look */
+.rounded-4 { border-radius: 1rem !important; }
+
+/* Glassmorphism Card Style */
+.glass-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    border: 1px solid var(--glass-brd) !important;
+    box-shadow: 0 14px 40px rgba(35,102,164,.08) !important;
+    transition: all var(--transition-speed) ease;
+}
+.glass-card:hover {
+    border-color: var(--teal) !important;
+    box-shadow: 0 20px 50px rgba(44,185,182,0.15) !important;
+}
+
+/* Custom Links & Color Accents */
+.custom-link {
+    color: var(--blue);
+    font-weight: 500;
+    transition: color var(--transition-speed);
+}
+.custom-link:hover {
+    color: var(--teal);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--blue), var(--teal)) !important;
+    border: none !important;
+    color: var(--white) !important;
+    box-shadow: 0 8px 24px rgba(35,102,164,.2) !important;
+    transition: all var(--transition-speed) ease;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(35,102,164,.3) !important;
+}
+
+/* ==========================================================================
+   MODULE CARDS & COMPONENT DESIGNS
+   ========================================================================== */
+.style-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    border: 1px solid var(--glass-brd) !important;
+    box-shadow: 0 14px 40px rgba(35,102,164,.08) !important;
+}
+
+.welcome-banner {
+    background: linear-gradient(135deg, var(--blue), var(--teal)) !important;
+    color: white;
+    border-radius: 24px;
+    box-shadow: var(--glow);
+}
+
+.welcome-banner p,
+.welcome-banner small {
+    color: rgba(255,255,255,0.9);
+}
+
+.banner-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+.banner-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.brand-logo, .brand-logo-sm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+.brand-logo img, .brand-logo-sm img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.brand-logo { width: 60px; height: 60px; }
+.brand-logo-sm { width: 32px; height: 32px; }
+
+.stat-icon {
+    color: var(--blue) !important;
+}
+
+.cursor-pointer { cursor: pointer; }
+.action-btn {
+    transition: all var(--transition-speed) ease;
+}
+.action-btn:hover {
+    transform: translateY(-3px);
+    border-color: var(--teal) !important;
+    background-color: var(--frost) !important;
+}
+
+.status-card-select {
+    opacity: 0.75;
+}
+.status-card-select:hover {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+.avatar-placeholder {
+    width: 70px;
+    height: 70px;
+    background-color: var(--frost) !important;
+    border: 1px solid var(--glass-brd);
+}
+
+/* ==========================================================================
+   DASHBOARD NEW ACCENTS & TRANSLATIONS
+   ========================================================================== */
+.transition-card {
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+.hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+.hover-primary:hover {
+    background: linear-gradient(135deg, var(--blue), var(--teal)) !important;
+    color: var(--white) !important;
+    border-color: transparent !important;
+}
+
+.quick-action-item {
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+.quick-action-item:hover {
+    background-color: rgba(44, 185, 182, 0.1) !important;
+    border-color: var(--teal) !important;
+    transform: translateX(4px);
+}
+
+.fade-in-view {
+    animation: fadeIn var(--transition-speed) ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   DASHBOARD STAT CARDS INTERACTIVITY
+   ========================================================================== */
+.dashboard-stat-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--glass-brd) !important;
+    background-color: var(--glass-bg) !important;
+    backdrop-filter: blur(10px);
+}
+
+.dashboard-stat-card:hover,
+.dashboard-stat-card.active-stat-card {
+    background: linear-gradient(135deg, var(--blue), var(--teal)) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(44, 185, 182, 0.3) !important;
+    border-color: transparent !important;
+}
+
+.dashboard-stat-card:hover .card-title-text,
+.dashboard-stat-card.active-stat-card .card-title-text,
+.dashboard-stat-card:hover .card-value-text,
+.dashboard-stat-card.active-stat-card .card-value-text,
+.dashboard-stat-card:hover .card-icon-wrapper i,
+.dashboard-stat-card.active-stat-card .card-icon-wrapper i {
+    color: #FFFFFF !important;
+}
+
+.dashboard-stat-card:hover .card-icon-wrapper,
+.dashboard-stat-card.active-stat-card .card-icon-wrapper {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   PROFILE SPECIFIC STYLING 
+   ========================================================================== */
+.profile-input:disabled {
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    border-color: var(--glass-brd) !important;
+    color: var(--ink) !important;
+    font-weight: 500;
+}
+.profile-input {
+    transition: all var(--transition-speed) ease;
+}
+
+/* ==========================================================================
+   MANAGE SCHEDULE & CALENDAR
+   ========================================================================== */
+#leave-emergency-toggle:checked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.monthly-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.calendar-header-day {
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 0.5rem;
+}
+
+.calendar-day-cell {
+    padding: 0.5rem 0;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--ink);
+    background-color: rgba(255,255,255,0.4);
+    border: 1px solid var(--glass-brd);
+    transition: background-color 0.15s ease;
+    cursor: default;
+}
+
+.calendar-day-cell.current-month {
+    background-color: #ffffff;
+    color: var(--ink);
+}
+
+.calendar-day-cell.current-month:hover:not(.empty-cell) {
+    background-color: var(--frost);
+}
+
+.calendar-day-cell.has-leave {
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    border-color: #dc3545 !important;
+    cursor: pointer;
+}
+
+.calendar-day-cell.has-leave:hover {
+    background-color: #c82333 !important;
+}
+
+.calendar-day-cell.has-leave.emergency-leave {
+    background-color: #8b0000 !important;
+    color: #ffffff !important;
+    border-color: #8b0000 !important;
+}
+
+.calendar-day-cell.has-leave.emergency-leave:hover {
+    background-color: #720000 !important;
+}
+
+.calendar-day-cell.today {
+    font-weight: 800;
+    border: 2px solid var(--teal);
+    color: var(--teal);
+}
+
+/* ==========================================================================
+   PROFILE DROPDOWN PANEL
+   ========================================================================== */
+.nav-profile-hover:hover {
+    background-color: var(--frost);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 15px;
+    width: 280px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid var(--glass-brd);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    z-index: 1050;
+    animation: fadeSlideDown 0.3s ease forwards;
+    transform-origin: top right;
+}
+
+@keyframes fadeSlideDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE SPA SIDEBAR FRAMEWORK LAYOUTS
+   ========================================================================== */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    z-index: 1040;
+    transition: transform var(--transition-speed) ease-in-out;
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(15px);
+    border-right: 1px solid var(--glass-brd) !important;
+}
+
+#main-wrapper {
+    margin-left: var(--sidebar-width);
+    transition: margin var(--transition-speed) ease-in-out;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
+}
+
+#sidebar .nav-link {
+    border-radius: 12px !important;
+    color: var(--muted) !important;
+    transition: all var(--transition-speed) ease;
+}
+
+#sidebar .nav-link:hover, #sidebar .nav-link.active {
+    background: linear-gradient(135deg, rgba(35, 102, 164, 0.1), rgba(44, 185, 182, 0.1)) !important;
+    color: var(--blue) !important;
+    font-weight: 600;
+}
+
+/* Floating icons for medical background */
+.bg-fx {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+.float-ic {
+    position: absolute;
+    font-size: 24px;
+    color: var(--teal);
+    opacity: .08;
+    animation: floatY 10s ease-in-out infinite;
+}
+
+/* Show/hide password button styling */
+.toggle-password-btn {
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #dee2e6;
+    border-left: none;
+    color: var(--muted);
+}
+.toggle-password-btn:hover {
+    color: var(--blue);
+}
+
+/* Reviews Card and Stars styles */
+.review-card {
+    background: rgba(255,255,255,0.4) !important;
+    border: 1px solid var(--glass-brd) !important;
+    transition: all var(--transition-speed) ease;
+}
+.review-card:hover {
+    background: rgba(255,255,255,0.7) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(35,102,164,0.06) !important;
+    border-color: var(--teal) !important;
+}
+
+/* Chart containers */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 240px;
+    width: 100%;
+}
+
+/* Floating Particles Keyframe Animation */
+@keyframes floatY {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Glassmorphism Welcome Banner Illustration Circular Background Box */
+.department-illustration-box {
+    width: 80px !important;
+    height: 80px !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15), 0 0 20px rgba(110, 192, 205, 0.3) !important;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+/* Small Device Screen Breakpoint Rules */
+@media (max-width: 991.98px) {
+    #sidebar {
+        transform: translateX(-100%);
+    }
+    #sidebar.open {
+        transform: translateX(0);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+    }
+    #main-wrapper {
+        margin-left: 0 !important;
+    }
+}
