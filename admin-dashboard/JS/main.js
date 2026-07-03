@@ -1,4 +1,32 @@
+/* ==========================
+   Authentication Check
+========================== */
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+
+    alert("Please login first.");
+
+    window.location.href = "../index.html";
+
+}
+
+if (user.role !== "ADMIN") {
+
+    alert("Access Denied");
+
+    window.location.href = "../index.html";
+
+}
+
+
 const logoutBtn = document.getElementById("logoutBtn");
+/* ==========================
+   Authentication Check
+========================== */
+
+
 
 if(logoutBtn){
     logoutBtn.addEventListener("click", function(e){
@@ -10,6 +38,7 @@ if(logoutBtn){
 
         if(confirmLogout){
 
+             localStorage.removeItem("user");
             window.location.href = "../index.html";
 
         }

@@ -61,59 +61,71 @@ function togglePasswordVisibility(inputId) {
 // ============================================
 // SECTION 3: DEMO LOGIN (No Local Storage)
 // ============================================
-const DEMO_USERS = [
-    { 
-        email: 'demo@mediconnect.com', 
-        password: 'demo123', 
-        name: 'Demo Patient', 
-        age: 35, 
-        dob: '1990-06-15', 
-        gender: 'Male' 
-    }
-];
+
 
 let currentUser = null;
 let isLoggedIn = false;
 
-function handleLogin(event) {
+async function handleLogin(event) {
+
     event.preventDefault();
-    
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    
-    document.getElementById('loginEmailError').classList.remove('show');
-    document.getElementById('loginPasswordError').classList.remove('show');
-    
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
     if (!email) {
-        document.getElementById('loginEmailError').classList.add('show');
-        document.getElementById('loginEmailError').textContent = 'Please enter your email';
-        showToast('Please enter your email', 'error');
+        showToast("Please enter your email", "error");
         return;
     }
-    
+
     if (!password) {
-        document.getElementById('loginPasswordError').classList.add('show');
-        showToast('Please enter your password', 'error');
+        showToast("Please enter your password", "error");
         return;
     }
-    
-    const user = DEMO_USERS.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-    
-    if (!user) {
-        document.getElementById('loginEmailError').classList.add('show');
-        document.getElementById('loginEmailError').textContent = 'Invalid credentials. Use demo@mediconnect.com / demo123';
-        showToast('Invalid credentials. Use demo@mediconnect.com / demo123', 'error');
+
+    const response = await fetch("http://127.0.0.1:8000/api/login/", {
+
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+
+        email: email,
+
+        password: password
+
+    })
+
+});
+
+const data = await response.json();
+
+if (response.ok) {
+
+    if (data.role !== "PATIENT") {
+
+        showToast("Please use the Hospital Login Portal", "error");
+
         return;
+
     }
-    
-    currentUser = user;
-    isLoggedIn = true;
-    
-    showToast('Welcome back, ' + user.name + '! 🎉', 'success');
-    closeLoginModal();
-    
-    document.getElementById('mainDashboard').style.display = 'block';
-    updateUserProfile(user);
+
+    localStorage.setItem("user", JSON.stringify(data));
+
+    showToast("Login Successful", "success");
+
+    window.location.href = "patient.html";
+
+}
+
+else {
+
+    showToast(data.error, "error");
+
+}
 }
 
 function handleRegister(event) {

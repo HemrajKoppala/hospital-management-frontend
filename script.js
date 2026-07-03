@@ -899,7 +899,7 @@ function initFormProcessors() {
 
     
     if (loginForm) {
-        loginForm.addEventListener("submit", (e) => {
+        loginForm.addEventListener("submit", async (e) => {
             e.preventDefault(); 
             
             if (!loginForm.checkValidity()) {
@@ -911,59 +911,72 @@ function initFormProcessors() {
 
                
 
-            // Admin Login
-if (
-    email.toLowerCase() === "admin@mediconnect.com" &&
-    password === "admin123"
-) {
-    window.location.href = "admin-dashboard/admin-dashboard.html";
-    return;
+            try {
+
+    const response = await fetch("http://127.0.0.1:8000/api/login/", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            email: email,
+            password: password
+
+        })
+
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+
+    localStorage.setItem("user", JSON.stringify(data));
+
+    if (data.role === "ADMIN") {
+
+        showToast("Welcome Admin");
+
+        window.location.href = "admin-dashboard/admin-dashboard.html";
+
+    }
+
+    else if (data.role === "DOCTOR") {
+
+        showToast("Welcome Doctor");
+
+        window.location.href = "index.html";
+
+    }
+
+    else {
+
+        alert("Please use the Patient Portal.");
+
+    }
+
 }
 
-/* ==========================
-   Role Redirect
-========================== */
+else {
 
+    alert(data.error);
 
+}
 
-                const doctor = DOCTORS.find(
-                    d => d.email.toLowerCase() === email.toLowerCase() &&
-                         d.password === password
-                );
+}
 
-                if (doctor) {
-                    CURRENT_DOCTOR = doctor;
+catch(error){
 
-                    // Check remember me setting
-                    const rememberMeChecked = document.getElementById("rememberMe").checked;
-                    if (rememberMeChecked) {
-                        localStorage.setItem("remember_email", email);
-                        localStorage.setItem("remember_password", password);
-                    } else {
-                        localStorage.removeItem("remember_email");
-                        localStorage.removeItem("remember_password");
-                    }
+    console.error(error);
 
-                    // Pre-fill profile page fields
-                    loadProfile(); 
+    alert("Cannot connect to server.");
 
-                    document.getElementById("login-page").classList.add("d-none");
-                    document.getElementById("app-container").classList.remove("d-none");
+}
 
-                    updateDashboardGreeting();
-                    updateDashboardStats();
-                    renderTodaysAppointments();
-                    renderDoctorReviews();
-                    
-                    // Render default tables with logged doctor department
-                    renderAppointmentsTable(APPOINTMENTS_DATA);
-                    renderScheduleTable();
-
-                    switchView("dashboard");
-                    showToast("Welcome " + doctor.name);
-                } else {
-                    alert("Invalid Email Address or Password");
-                }
+                
             }
         });
     }
