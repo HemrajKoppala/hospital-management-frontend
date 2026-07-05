@@ -13,6 +13,9 @@ const cancelDoctorBtn = document.getElementById("cancelDoctorBtn");
 const saveDoctorBtn = document.getElementById("saveDoctorBtn");
 const doctorTableBody = document.getElementById("doctorTableBody");
 
+let editingDoctorId = null;
+let isEditMode = false;
+
 saveDoctorBtn.addEventListener("click", async function () {
 
     const name = document.getElementById("doctorName").value.trim();
@@ -36,7 +39,6 @@ const consultation_fee = document.getElementById("doctorFee").value;
 if (
     !name ||
     !email ||
-    !password ||
     !phone ||
     !qualification ||
     !department ||
@@ -44,47 +46,59 @@ if (
     !experience ||
     !consultation_fee
 ) {
-
     alert("Please fill all fields.");
-
     return;
+}
 
+if (!isEditMode && !password) {
+    alert("Password is required.");
+    return;
 }
 
 try {
 
-    const response = await fetch("http://127.0.0.1:8000/api/doctors/", {
+    const url = isEditMode
+    ? `http://127.0.0.1:8000/api/doctors/${editingDoctorId}/`
+    : "http://127.0.0.1:8000/api/doctors/";
 
-        method: "POST",
+const method = isEditMode ? "PUT" : "POST";
 
-        headers: {
+const response = await fetch(url, {
 
-            "Content-Type": "application/json"
+    method: method,
 
-        },
+    headers: {
 
-        body: JSON.stringify({
+        "Content-Type": "application/json"
 
-            name: name,
-            email: email,
-            password: password,
-            phone: phone,
-            qualification: qualification,
-            department: department,
-            specialization: specialization,
-            experience: experience,
-            consultation_fee: consultation_fee,
-            available: true
+    },
 
-        })
+    body: JSON.stringify({
 
-    });
+        name: name,
+        email: email,
+        password: password,
+        phone: phone,
+        qualification: qualification,
+        department: department,
+        specialization: specialization,
+        experience: experience,
+        consultation_fee: consultation_fee,
+        available: true
+
+    })
+
+});
 
     const data = await response.json();
 
     if (response.ok) {
 
-        alert("Doctor Added Successfully!");
+        alert(
+    isEditMode
+        ? "Doctor Updated Successfully!"
+        : "Doctor Added Successfully!"
+);
 
         loadDoctors();
 
@@ -121,6 +135,12 @@ document.getElementById("doctorDepartment").value = "";
 document.getElementById("doctorSpecialization").value = "";
 document.getElementById("doctorExperience").value = "";
 document.getElementById("doctorFee").value = "";
+
+editingDoctorId = null;
+isEditMode = false;
+
+document.querySelector("#doctorModal .modal-header h2").textContent =
+    "Add Doctor";
 
 });
 
@@ -159,6 +179,9 @@ async function loadDoctors() {
         const response = await fetch("http://127.0.0.1:8000/api/doctors/");
 
         const doctors = await response.json();
+
+        document.getElementById("totalDoctors").textContent = doctors.length;
+
         doctorTableBody.innerHTML = "";
 
         doctors.forEach((doctor, index) => {
@@ -172,7 +195,7 @@ async function loadDoctors() {
         <td>${doctor.experience}</td>
         <td>${doctor.available ? "Active" : "Inactive"}</td>
         <td>
-            <button class="edit-btn">Edit</button>
+            <button class="edit-btn" data-id="${doctor.id}">Edit</button>
             <button class="delete-btn" data-id="${doctor.id}">
     Delete
 </button>
@@ -181,6 +204,57 @@ async function loadDoctors() {
 
     doctorTableBody.appendChild(row);
     const deleteBtn = row.querySelector(".delete-btn");
+
+    const editBtn = row.querySelector(".edit-btn");
+
+editBtn.addEventListener("click", async function () {
+
+    const doctorId = this.dataset.id;
+
+    editingDoctorId = doctorId;
+
+    const editBtn = row.querySelector(".edit-btn");
+
+editBtn.addEventListener("click", async function () {
+
+    const doctorId = this.dataset.id;
+
+    editingDoctorId = doctorId;
+    isEditMode = true;
+    document.querySelector("#doctorModal .modal-header h2").textContent =
+    "Edit Doctor";
+
+    try {
+
+        const response = await fetch(
+            `http://127.0.0.1:8000/api/doctors/${doctorId}/`
+        );
+
+        const doctor = await response.json();
+
+        document.getElementById("doctorName").value = doctor.name;
+        document.getElementById("doctorEmail").value = doctor.email;
+        document.getElementById("doctorPassword").value = "";
+        document.getElementById("doctorPhone").value = doctor.phone;
+        document.getElementById("doctorQualification").value = doctor.qualification;
+        document.getElementById("doctorDepartment").value = doctor.department;
+        document.getElementById("doctorSpecialization").value = doctor.specialization;
+        document.getElementById("doctorExperience").value = doctor.experience;
+        document.getElementById("doctorFee").value = doctor.consultation_fee;
+
+        doctorModal.style.display = "flex";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+    }
+
+});
+
+});
 
 deleteBtn.addEventListener("click", async function () {
 
@@ -243,5 +317,9 @@ deleteBtn.addEventListener("click", async function () {
 
     }
 
+    
+
 }
+
+
 loadDoctors();

@@ -174,3 +174,4 @@ document.getElementById("quickSettings")
     settingsBtn.click();
 
 });
+
