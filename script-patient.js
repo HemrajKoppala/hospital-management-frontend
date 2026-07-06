@@ -128,13 +128,99 @@ else {
 }
 }
 
-function handleRegister(event) {
+async function handleRegister(event) {
+
     event.preventDefault();
-    showToast('Demo mode: Please use demo@mediconnect.com / demo123 to login', 'info');
-    closeRegisterModal();
-    setTimeout(() => {
-        openLoginModal();
-    }, 500);
+
+    const name = document.getElementById("regFullName").value.trim();
+    const dob = document.getElementById("regDob").value;
+    const gender = document.getElementById("regGender").value;
+    const email = document.getElementById("regEmail").value.trim();
+    const phone = document.getElementById("regPhone").value.trim();
+    const address = document.getElementById("regAddress").value.trim();
+    const blood_group = document.getElementById("regBloodGroup").value;
+    const password = document.getElementById("regPassword").value;
+    const confirmPassword =
+        document.getElementById("regConfirmPassword").value;
+
+    if (password !== confirmPassword) {
+
+        showToast("Passwords do not match", "error");
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/api/patients/",
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    name: name,
+                    email: email,
+                    password: password,
+                    date_of_birth: dob,
+                    gender: gender,
+                    phone: phone,
+                    address: address,
+                    blood_group: blood_group
+
+                })
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+
+            showToast(
+                "Registration Successful! Please Login.",
+                "success"
+            );
+
+            closeRegisterModal();
+
+            openLoginModal();
+
+            document.getElementById("registerForm").reset();
+
+        }
+
+        else {
+
+            showToast(
+                JSON.stringify(data),
+                "error"
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Cannot connect to server.",
+            "error"
+        );
+
+    }
+
 }
 
 function getCurrentUser() {
